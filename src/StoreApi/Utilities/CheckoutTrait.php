@@ -129,6 +129,7 @@ trait CheckoutTrait {
 		$this->order->set_customer_note( $request['customer_note'] ?? '' );
 		$this->order->set_payment_method( $this->get_request_payment_method_id( $request ) );
 		$this->order->set_payment_method_title( $this->get_request_payment_method_title( $request ) );
+		$this->order->update_meta_data( 'woocommerce_blocks_gift_wrapping', (bool) $request['gift_wrapping'] );
 
 		wc_do_deprecated_action(
 			'__experimental_woocommerce_blocks_checkout_update_order_from_request',
