@@ -151,6 +151,7 @@ class Checkout extends AbstractBlock {
 					<div data-block-name="woocommerce/checkout-shipping-methods-block" class="wp-block-woocommerce-checkout-shipping-methods-block"></div>
 					<div data-block-name="woocommerce/checkout-payment-block" class="wp-block-woocommerce-checkout-payment-block"></div>' .
 					( isset( $attributes['showOrderNotes'] ) && false === $attributes['showOrderNotes'] ? '' : '<div data-block-name="woocommerce/checkout-order-note-block" class="wp-block-woocommerce-checkout-order-note-block"></div>' ) .
+					'<div data-block-name="woocommerce/checkout-gift-wrapping-block" class="wp-block-woocommerce-checkout-gift-wrapping-block"></div>' .
 					( isset( $attributes['showPolicyLinks'] ) && false === $attributes['showPolicyLinks'] ? '' : '<div data-block-name="woocommerce/checkout-terms-block" class="wp-block-woocommerce-checkout-terms-block"></div>' ) .
 					'<div data-block-name="woocommerce/checkout-actions-block" class="wp-block-woocommerce-checkout-actions-block"></div>
 				</div>
@@ -457,6 +458,7 @@ class Checkout extends AbstractBlock {
 			'CheckoutExpressPaymentBlock',
 			'CheckoutFieldsBlock',
 			'CheckoutOrderNoteBlock',
+			'CheckoutGiftWrappingBlock',
 			'CheckoutOrderSummaryBlock',
 			'CheckoutOrderSummaryCartItemsBlock',
 			'CheckoutOrderSummaryCouponFormBlock',
