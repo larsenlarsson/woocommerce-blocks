@@ -125,6 +125,16 @@ export const __internalSetOrderNotes = ( orderNotes: string ) => ( {
 	orderNotes,
 } );
 
+/**
+ * Set the gift wrapping for the order
+ *
+ * @param  giftWrapping String that represents gift wrapping for the order
+ */
+export const __internalSetGiftWrapping = ( giftWrapping: string ) => ( {
+	type: types.SET_GIFT_WRAPPING,
+	giftWrapping,
+} );
+
 export const setPrefersCollection = ( prefersCollection: boolean ) => ( {
 	type: types.SET_PREFERS_COLLECTION,
 	prefersCollection,
@@ -162,6 +172,7 @@ export type CheckoutAction =
 			| typeof __internalSetUseShippingAsBilling
 			| typeof __internalSetShouldCreateAccount
 			| typeof __internalSetOrderNotes
+			| typeof __internalSetGiftWrapping
 			| typeof setPrefersCollection
 			| typeof __internalSetExtensionData
 	  >

@@ -105,6 +105,11 @@ const settings = {
 											[]
 									  )
 									: false,
+								createBlock(
+									'woocommerce/checkout-gift-wrapping-block',
+									{},
+									[]
+								),
 								showPolicyLinks
 									? createBlock(
 											'woocommerce/checkout-terms-block',

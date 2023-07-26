@@ -1,0 +1,30 @@
+{
+	"name": "woocommerce/checkout-gift-wrapping-block",
+	"version": "1.0.0",
+	"title": "Gift Wrapping",
+	"description": "Allow customers to add gift wrapping to their order.",
+	"category": "woocommerce",
+	"supports": {
+		"align": false,
+		"html": false,
+		"multiple": false,
+		"reusable": false
+	},
+	"attributes": {
+		"className": {
+			"type": "string",
+			"default": ""
+		},
+		"lock": {
+			"type": "object",
+			"default": {
+				"remove": false,
+				"move": true
+			}
+		}
+	},
+	"parent": [ "woocommerce/checkout-fields-block" ],
+	"textdomain": "woo-gutenberg-products-block",
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2
+}

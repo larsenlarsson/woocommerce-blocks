@@ -101,6 +101,7 @@ export const __internalEmitAfterProcessingEvents: emitAfterProcessingEventsType 
 				orderId: select.getOrderId(),
 				customerId: select.getCustomerId(),
 				orderNotes: select.getOrderNotes(),
+				giftWrapping: select.getGiftWrapping(),
 				processingResponse:
 					wpSelect( PAYMENT_STORE_KEY ).getPaymentResult(),
 			};

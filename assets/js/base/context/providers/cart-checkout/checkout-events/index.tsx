@@ -133,6 +133,7 @@ export const CheckoutEventsProvider = ( {
 			checkoutHasError: store.hasError(),
 			checkoutOrderId: store.getOrderId(),
 			checkoutOrderNotes: store.getOrderNotes(),
+			checkoutGiftWrapping: store.getGiftWrapping(),
 			checkoutCustomerId: store.getCustomerId(),
 		};
 	} );

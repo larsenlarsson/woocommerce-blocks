@@ -146,6 +146,18 @@ const reducer = ( state = defaultState, action: CheckoutAction ) => {
 			}
 			break;
 
+		case types.SET_GIFT_WRAPPING:
+			if (
+				action.giftWrapping !== undefined &&
+				state.giftWrapping !== action.giftWrapping
+			) {
+				newState = {
+					...state,
+					giftWrapping: action.giftWrapping,
+				};
+			}
+			break;
+
 		case types.SET_EXTENSION_DATA:
 			if (
 				action.extensionData !== undefined &&

@@ -6,6 +6,7 @@
     -   [getCustomerId](#getcustomerid)
     -   [getOrderId](#getorderid)
     -   [getOrderNotes](#getordernotes)
+    -   [getGiftWrapping](#getgiftwrapping)
     -   [getRedirectUrl](#getredirecturl)
     -   [getExtensionData](#getextensiondata)
     -   [getCheckoutStatus](#getcheckoutstatus)
@@ -45,6 +46,14 @@ Returns the order notes.
 #### _Returns_
 
 -   `string`: Order notes.
+
+### getGiftWrapping
+
+Returns the gift wrapping message.
+
+#### _Returns_
+
+-   `string`: Gift wrapping message.
 
 ### getRedirectUrl
 

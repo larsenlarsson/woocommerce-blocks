@@ -9,6 +9,7 @@ import './checkout-contact-information-block';
 import './checkout-billing-address-block';
 import './checkout-actions-block';
 import './checkout-order-note-block';
+import './checkout-gift-wrapping-block';
 import './checkout-order-summary-block';
 import './checkout-payment-block';
 import './checkout-express-payment-block';

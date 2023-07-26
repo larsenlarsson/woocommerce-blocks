@@ -120,6 +120,16 @@ registerCheckoutBlock( {
 } );
 
 registerCheckoutBlock( {
+	metadata: metadata.CHECKOUT_GIFT_WRAPPING,
+	component: lazy(
+		() =>
+			import(
+				/* webpackChunkName: "checkout-blocks/gift-wrapping" */ './checkout-gift-wrapping-block/block'
+			)
+	),
+} );
+
+registerCheckoutBlock( {
 	metadata: metadata.CHECKOUT_TERMS,
 	component: lazy(
 		() =>

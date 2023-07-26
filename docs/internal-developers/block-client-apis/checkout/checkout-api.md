@@ -45,6 +45,7 @@ Data can be accessed through the following selectors:
 -   `hasOrder()`: This is true when orderId is truthy.
 -   `hasError()`: This is true when the checkout has an error.
 -   `getOrderNotes()`: Returns the order notes.
+-   `getGiftWrapping()`: Returns the gift wrapping message.
 -   `getCustomerId()`: Returns the customer ID.
 -   `getOrderId()`: Returns the order ID.
 -   `getRedirectUrl()`: Returns the redirect URL.

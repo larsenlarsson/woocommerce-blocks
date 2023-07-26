@@ -48,6 +48,7 @@ export const Edit = ( {
 		[ 'woocommerce/checkout-shipping-methods-block', {}, [] ],
 		[ 'woocommerce/checkout-payment-block', {}, [] ],
 		[ 'woocommerce/checkout-order-note-block', {}, [] ],
+		[ 'woocommerce/checkout-gift-wrapping-block', {}, [] ],
 		[ 'woocommerce/checkout-terms-block', {}, [] ],
 		[ 'woocommerce/checkout-actions-block', {}, [] ],
 	].filter( Boolean ) as unknown as TemplateArray;

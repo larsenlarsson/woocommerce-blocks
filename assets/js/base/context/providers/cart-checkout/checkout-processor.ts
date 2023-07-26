@@ -67,6 +67,7 @@ const CheckoutProcessor = () => {
 			isBeforeProcessing: store.isBeforeProcessing(),
 			isComplete: store.isComplete(),
 			orderNotes: store.getOrderNotes(),
+			giftWrapping: store.getGiftWrapping(),
 			shouldCreateAccount: store.getShouldCreateAccount(),
 			extensionData: store.getExtensionData(),
 		};

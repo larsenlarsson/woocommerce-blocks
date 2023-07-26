@@ -21,6 +21,8 @@ export type CheckoutState = {
 	orderId: number;
 	// Order notes introduced by the user in the checkout form.
 	orderNotes: string;
+	// Gift wrapping introduced by the user in the checkout form.
+	giftWrapping: string;
 	// This is the ID of the customer the draft order belongs to.
 	customerId: number;
 	// Should the billing form be hidden and inherit the shipping address?
@@ -41,6 +43,7 @@ export const defaultState: CheckoutState = {
 	customerId: checkoutData.customer_id,
 	calculatingCount: 0,
 	orderNotes: '',
+	giftWrapping: '',
 	useShippingAsBilling: isSameAddress(
 		checkoutData.billing_address,
 		checkoutData.shipping_address

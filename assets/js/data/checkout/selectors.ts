@@ -24,6 +24,10 @@ export const getOrderNotes = ( state: CheckoutState ) => {
 	return state.orderNotes;
 };
 
+export const getGiftWrapping = ( state: CheckoutState ) => {
+	return state.giftWrapping;
+};
+
 export const getRedirectUrl = ( state: CheckoutState ) => {
 	return state.redirectUrl;
 };

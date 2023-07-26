@@ -203,11 +203,30 @@ describe.only( 'Checkout Store Reducer', () => {
 	it( 'should handle SET_ORDER_NOTES', () => {
 		const expectedState = {
 			...defaultState,
-			orderNotes: 'test',
+			orderNotes: 'test order note',
 		};
 
 		expect(
-			reducer( defaultState, actions.__internalSetOrderNotes( 'test' ) )
+			reducer(
+				defaultState,
+				actions.__internalSetOrderNotes( 'test order note' )
+			)
+		).toEqual( expectedState );
+	} );
+
+	it( 'should handle SET_GIFT_WRAPPING', () => {
+		const expectedState = {
+			...defaultState,
+			giftWrapping: 'test gift wrapping message',
+		};
+
+		expect(
+			reducer(
+				defaultState,
+				actions.__internalSetGiftWrapping(
+					'test gift wrapping message'
+				)
+			)
 		).toEqual( expectedState );
 	} );
 
