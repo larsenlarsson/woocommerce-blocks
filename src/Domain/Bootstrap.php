@@ -8,6 +8,7 @@ use Automattic\WooCommerce\Blocks\BlockPatterns;
 use Automattic\WooCommerce\Blocks\BlockTemplatesController;
 use Automattic\WooCommerce\Blocks\BlockTypesController;
 use Automattic\WooCommerce\Blocks\Domain\Services\CreateAccount;
+use Automattic\WooCommerce\Blocks\Domain\Services\GiftWrapping;
 use Automattic\WooCommerce\Blocks\Domain\Services\Notices;
 use Automattic\WooCommerce\Blocks\Domain\Services\DraftOrders;
 use Automattic\WooCommerce\Blocks\Domain\Services\FeatureGating;
@@ -131,6 +132,7 @@ class Bootstrap {
 		$this->container->get( Notices::class )->init();
 		$this->container->get( StoreApi::class )->init();
 		$this->container->get( GoogleAnalytics::class );
+		$this->container->get( GiftWrapping::class );
 		$this->container->get( BlockTypesController::class );
 		$this->container->get( BlockTemplatesController::class );
 		$this->container->get( ProductSearchResultsTemplate::class );
@@ -345,6 +347,12 @@ class Bootstrap {
 				}
 				$asset_api = $container->get( AssetApi::class );
 				return new GoogleAnalytics( $asset_api );
+			}
+		);
+		$this->container->register(
+			GiftWrapping::class,
+			function( Container $container ) {
+				return new GiftWrapping();
 			}
 		);
 		$this->container->register(
