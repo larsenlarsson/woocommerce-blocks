@@ -22,7 +22,7 @@ class RoutesController {
 	 *
 	 * @var array
 	 */
-	protected $routes = [];
+	protected $routes = array();
 
 	/**
 	 * Constructor.
@@ -31,8 +31,8 @@ class RoutesController {
 	 */
 	public function __construct( SchemaController $schema_controller ) {
 		$this->schema_controller = $schema_controller;
-		$this->routes            = [
-			'v1' => [
+		$this->routes            = array(
+			'v1' => array(
 				Routes\V1\Batch::IDENTIFIER              => Routes\V1\Batch::class,
 				Routes\V1\Cart::IDENTIFIER               => Routes\V1\Cart::class,
 				Routes\V1\CartAddItem::IDENTIFIER        => Routes\V1\CartAddItem::class,
@@ -47,6 +47,7 @@ class RoutesController {
 				Routes\V1\CartSelectShippingRate::IDENTIFIER => Routes\V1\CartSelectShippingRate::class,
 				Routes\V1\CartUpdateItem::IDENTIFIER     => Routes\V1\CartUpdateItem::class,
 				Routes\V1\CartUpdateCustomer::IDENTIFIER => Routes\V1\CartUpdateCustomer::class,
+				Routes\V1\CartAddressPrediction::IDENTIFIER => Routes\V1\CartAddressPrediction::class,
 				Routes\V1\Checkout::IDENTIFIER           => Routes\V1\Checkout::class,
 				Routes\V1\ProductAttributes::IDENTIFIER  => Routes\V1\ProductAttributes::class,
 				Routes\V1\ProductAttributesById::IDENTIFIER => Routes\V1\ProductAttributesById::class,
@@ -59,8 +60,8 @@ class RoutesController {
 				Routes\V1\Products::IDENTIFIER           => Routes\V1\Products::class,
 				Routes\V1\ProductsById::IDENTIFIER       => Routes\V1\ProductsById::class,
 				Routes\V1\ProductsBySlug::IDENTIFIER     => Routes\V1\ProductsBySlug::class,
-			],
-		];
+			),
+		);
 
 		if ( Package::is_experimental_build() ) {
 			$this->routes['v1'][ Routes\V1\Order::IDENTIFIER ]         = Routes\V1\Order::class;
