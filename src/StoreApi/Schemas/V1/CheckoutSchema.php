@@ -94,6 +94,12 @@ class CheckoutSchema extends AbstractSchema {
 				'type'        => 'string',
 				'context'     => [ 'view', 'edit' ],
 			],
+			'gift_wrapping'     => [
+				'description' => __( 'Whether the order should be gift-wrapped.', 'woo-gutenberg-products-block' ),
+				'type'        => 'boolean',
+				'context'     => [ 'view', 'edit' ],
+				'optional'    => true,
+			],
 			'customer_id'       => [
 				'description' => __( 'Customer ID if registered. Will return 0 for guests.', 'woo-gutenberg-products-block' ),
 				'type'        => 'integer',
@@ -197,6 +203,7 @@ class CheckoutSchema extends AbstractSchema {
 			'order_number'      => $order->get_order_number(),
 			'customer_note'     => $order->get_customer_note(),
 			'customer_id'       => $order->get_customer_id(),
+			'gift_wrapping'     => (bool) $order->get_meta( 'woocommerce_blocks_gift_wrapping' ),
 			'billing_address'   => (object) $this->billing_address_schema->get_item_response( $order ),
 			'shipping_address'  => (object) $this->shipping_address_schema->get_item_response( $order ),
 			'payment_method'    => $order->get_payment_method(),
