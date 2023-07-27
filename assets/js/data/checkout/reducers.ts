@@ -147,13 +147,20 @@ const reducer = ( state = defaultState, action: CheckoutAction ) => {
 			break;
 
 		case types.SET_GIFT_WRAPPING:
+			newState = {
+				...state,
+				giftWrapping: !! action.giftWrapping,
+			};
+			break;
+
+		case types.SET_GIFT_WRAPPING_NOTE:
 			if (
-				action.giftWrapping !== undefined &&
-				state.giftWrapping !== action.giftWrapping
+				action.giftWrappingNote !== undefined &&
+				state.giftWrapping !== action.giftWrappingNote
 			) {
 				newState = {
 					...state,
-					giftWrapping: action.giftWrapping,
+					giftWrappingNote: action.giftWrappingNote,
 				};
 			}
 			break;
