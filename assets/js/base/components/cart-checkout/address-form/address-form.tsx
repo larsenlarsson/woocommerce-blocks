@@ -10,6 +10,7 @@ import {
 	BillingStateInput,
 	ShippingStateInput,
 } from '@woocommerce/base-components/state-input';
+import { AddressInput } from '@woocommerce/base-components/address-input';
 import { useEffect, useMemo } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { withInstanceId } from '@wordpress/compose';
@@ -252,6 +253,34 @@ const AddressForm = ( {
 								onChange( {
 									...values,
 									state: newValue,
+								} )
+							}
+							errorMessage={ field.errorMessage }
+							required={ field.required }
+						/>
+					);
+				}
+
+				if ( field.key === 'address_1' ) {
+					const Tag = AddressInput;
+					return (
+						<Tag
+							key={ field.key }
+							id={ `${ id }-${ field.key }` }
+							errorId={ errorId }
+							type={ type }
+							country={ values.country }
+							label={
+								field.required
+									? field.label
+									: field.optionalLabel
+							}
+							value={ values.address_1 }
+							autoComplete={ field.autocomplete }
+							onChange={ ( newValue ) =>
+								onChange( {
+									...values,
+									address_1: newValue,
 								} )
 							}
 							errorMessage={ field.errorMessage }
