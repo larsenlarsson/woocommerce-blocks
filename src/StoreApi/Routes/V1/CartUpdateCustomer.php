@@ -147,7 +147,7 @@ class CartUpdateCustomer extends AbstractCartRoute {
 				array(
 					'place_id' => $billing['place_id'],
 					'key'      => $api_key,
-					'fields'   => 'formatted_address,address_components',
+					'fields'   => 'formatted_address,address_components,formatted_phone_number',
 				),
 				'https://maps.googleapis.com/maps/api/place/details/json'
 			);
@@ -168,6 +168,11 @@ class CartUpdateCustomer extends AbstractCartRoute {
 			}
 
 			$billing['address_1'] = $data['result']['formatted_address'];
+
+			if ( isset( $billing['phone'] ) ) {
+				$billing['phone']  = $data['result']['formatted_phone_number'];
+				$shipping['phone'] = $billing['phone'];
+			}
 
 			foreach ( $data['result']['address_components'] as $component ) {
 				if ( in_array( 'country', $component['types'], true ) ) {
