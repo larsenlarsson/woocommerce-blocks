@@ -77,6 +77,12 @@ abstract class AbstractAddressSchema extends AbstractSchema {
 				'context'     => [ 'view', 'edit' ],
 				'required'    => true,
 			],
+			'place_id'   => [
+				'description' => __( 'Google Places ID', 'woo-gutenberg-products-block' ),
+				'type'        => 'string',
+				'context'     => [ 'view', 'edit' ],
+				'required'    => true,
+			],
 		];
 	}
 

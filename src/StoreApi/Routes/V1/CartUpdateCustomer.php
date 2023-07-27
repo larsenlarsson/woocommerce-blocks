@@ -141,9 +141,59 @@ class CartUpdateCustomer extends AbstractCartRoute {
 			'shipping_address'
 		);
 
+		if ( isset( $billing['place_id'] ) ) {
+			$api_key  = get_option( 'woocommerce_google_maps_api_key', '' );
+			$url      = add_query_arg(
+				array(
+					'place_id' => $billing['place_id'],
+					'key'      => $api_key,
+					'fields'   => 'formatted_address,address_components',
+				),
+				'https://maps.googleapis.com/maps/api/place/details/json'
+			);
+			$response = wp_remote_get( $url );
+
+			if ( is_wp_error( $response ) ) {
+				return array();
+			}
+
+			$body = wp_remote_retrieve_body( $response );
+			if ( empty( $body ) ) {
+				return array();
+			}
+
+			$data = json_decode( $body, true );
+			if ( empty( $data ) ) {
+				return array();
+			}
+
+			$billing['address_1'] = $data['result']['formatted_address'];
+
+			foreach ( $data['result']['address_components'] as $component ) {
+				if ( in_array( 'country', $component['types'], true ) ) {
+					$billing['country'] = $component['short_name'];
+				}
+				if ( in_array( 'postal_code', $component['types'], true ) ) {
+					$billing['postcode'] = $component['long_name'];
+				}
+				if ( in_array( 'administrative_area_level_1', $component['types'], true ) ) {
+					$billing['state'] = $component['long_name'];
+				}
+				if ( in_array( 'locality', $component['types'], true ) ) {
+					$billing['city'] = $component['long_name'];
+				}
+			}
+		}
+
 		// If the cart does not need shipping, shipping address is forced to match billing address unless defined.
 		if ( ! $cart->needs_shipping() && ! isset( $request['shipping_address'] ) ) {
 			$shipping = $billing;
+		} elseif ( isset( $billing['place_id'] ) ) {
+			$shipping['address_1'] = $billing['address_1'];
+			$shipping['country']   = $billing['country'];
+			$shipping['postcode']  = $billing['postcode'];
+			$shipping['state']     = $billing['state'];
+			$shipping['city']      = $billing['city'];
 		}
 
 		// Run validation and sanitization now that the cart and customer data is loaded.
