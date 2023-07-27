@@ -54,6 +54,9 @@ const getBlockifiedTemplate = () =>
 		createBlock( 'woocommerce/related-products', {
 			align: 'wide',
 		} ),
+		createBlock( 'woocommerce/last-seen-products', {
+			align: 'wide',
+		} ),
 	].filter( Boolean ) as BlockInstance[];
 
 const isConversionPossible = () => {

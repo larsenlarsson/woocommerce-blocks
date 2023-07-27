@@ -20,5 +20,5 @@ registerBlockSingleProductTemplate( {
 		edit,
 		save,
 	},
-	isAvailableOnPostEditor: false,
+	isAvailableOnPostEditor: true,
 } );

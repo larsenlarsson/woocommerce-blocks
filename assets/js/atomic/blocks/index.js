@@ -20,3 +20,4 @@ import './product-elements/product-details';
 import './product-elements/product-reviews';
 import './product-elements/related-products';
 import './product-elements/product-meta';
+import './product-elements/last-seen-products';
