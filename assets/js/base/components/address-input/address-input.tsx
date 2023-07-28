@@ -16,9 +16,10 @@ import { removeAllNotices } from '@woocommerce/base-utils';
 import { SearchCombobox } from './search-combobox';
 import './style.scss';
 import type { AddressInputProps } from './AddressInputProps';
+import { apiFetchWithHeaders } from './fetch-headers';
 
 const addressAutocompleteEnabled = true;
-
+let controller;
 const AddressInput = ( {
 	className,
 	id,
@@ -30,33 +31,12 @@ const AddressInput = ( {
 	value = '',
 	required = false,
 }: AddressInputProps ): JSX.Element => {
-	const [ options, setOptions ] = useState( [
-		{
-			value: 'ChIJ6cScnleipBIR2fgRcz23s44',
-			label: 'La Rambla, 25, Barcelona, Spain',
-		},
-		{
-			value: 'ChIJXdRfObI3Yg0RDtPNWkwOt4c',
-			label: 'Rambla de Méndez Nú??ez, 25, Alicante, Spain',
-		},
-		{
-			value: 'ChIJo7kdbr0GuxIRrbWy409oQPM',
-			label: 'La Rambla, 25, Sant Feliu de Guíxols, Spain',
-		},
-		{
-			value: 'ChIJceQjPMONuhIRJviyISQrXME',
-			label: 'La Rambla, 25, Figueres, Spain',
-		},
-		{
-			value: 'ChIJZ5YyjYbMQQwREjbK_8DEZTo',
-			label: 'Rambla de Santa Cruz, 25, Santa Cruz de Tenerife, Spain',
-		},
-	] );
-	const persistPlace = ( props ) => {
+	const [ options, setOptions ] = useState( [] );
+	const persistPlace = ( placeId ) => {
 		dispatch( CART_STORE_KEY )
 			.updateCustomerData(
 				{
-					billing_address: { place_id: props },
+					billing_address: { place_id: placeId },
 				},
 				false
 			)
@@ -65,20 +45,51 @@ const AddressInput = ( {
 				processErrorResponse( response );
 			} );
 	};
-	const persistAddress = ( props ) => {
-		dispatch( CART_STORE_KEY )
-			.updateCustomerData(
-				{
-					billing_address: { place_id: props },
-				},
-				false
-			)
-			.then( removeAllNotices )
-			.catch( ( response ) => {
-				processErrorResponse( response );
-			} );
-	};
+	useEffect( () => {
+		async function fetchData( type: string ) {
+			// If controller is defined, abort the previous fetch
+			if ( controller !== undefined ) {
+				controller.abort();
+			}
 
+			// Create a new controller
+			controller = new AbortController();
+			const signal = controller.signal;
+
+			try {
+				const response = await fetch(
+					'/wp-json/wc/store/v1/cart/address-prediction?text=' +
+						type +
+						'&session-token=sessiontoken',
+					{
+						method: 'GET',
+						cache: 'no-store',
+						signal,
+					}
+				);
+
+				if ( ! response.ok ) {
+					throw new Error(
+						`HTTP error! status: ${ response.status }`
+					);
+				}
+
+				const data = await response.json();
+
+				// Do something with the data
+				setOptions( data );
+			} catch ( error ) {
+				if ( error.name === 'AbortError' ) {
+					console.log( 'Fetch aborted' );
+				} else {
+					console.log( 'Fetch error:', error );
+				}
+			}
+		}
+		if ( value && value.length > 2 ) {
+			fetchData( value );
+		}
+	}, [ value ] );
 	if ( addressAutocompleteEnabled ) {
 		return (
 			<div
@@ -90,12 +101,13 @@ const AddressInput = ( {
 				<SearchCombobox
 					id={ id }
 					label={ label }
+					onChange={ onChange }
 					options={ options }
+					onSelect={ persistPlace }
 					value={ value }
 					errorId={ errorId }
 					errorMessage={ errorMessage }
 					required={ required }
-					autoComplete={ autoComplete }
 				/>
 			</div>
 		);

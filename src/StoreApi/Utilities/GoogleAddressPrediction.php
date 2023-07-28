@@ -42,8 +42,8 @@ class GoogleAddressPrediction {
 		$predictions = array_map(
 			function( $prediction ) {
 				return array(
-					'id'          => $prediction['place_id'],
-					'description' => $this->format_matched_substrings( $prediction['description'], $prediction['matched_substrings'] ),
+					'value' => $prediction['place_id'],
+					'label' => $this->format_matched_substrings( $prediction['description'], $prediction['matched_substrings'] ),
 				);
 			},
 			$data['predictions']
@@ -62,7 +62,7 @@ class GoogleAddressPrediction {
 			$end    = $start + $length;
 
 			$description = substr( $description, 0, $start )
-				. '<em>' . substr( $description, $start, $length ) . '</em>'
+				. '<strong>' . substr( $description, $start, $length ) . '</strong>'
 				. substr( $description, $end );
 		}
 		return $description;

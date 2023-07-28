@@ -1,26 +1,68 @@
+/* eslint-disable no-console */
 /**
  * External dependencies
  */
+import { __ } from '@wordpress/i18n';
+import { useState, useEffect, useRef } from '@wordpress/element';
 import * as Ariakit from '@ariakit/react';
+import classnames from 'classnames';
+import { decodeEntities } from '@wordpress/html-entities';
 
-export function SearchCombobox( { className, options, label, onChange } ) {
-	const [ value, setValue ] = React.useState( {} );
+interface SearchComboboxOption {
+	label: string;
+	value: string;
+}
+
+export function SearchCombobox( {
+	className,
+	options,
+	label,
+	onChange,
+	onSelect,
+	id,
+	initialValue,
+}: {
+	className?: string;
+	options: SearchComboboxOption[];
+	label: string;
+	onChange: ( value: string ) => void;
+	id: string;
+	initialValue: string;
+} ) {
+	const [ value, setValue ] = useState( {
+		label: initialValue,
+		value: '',
+	} );
+
+	const onSetValue = ( _value: string ) => {
+		const selectedOption = options.find(
+			( option: SearchComboboxOption ) => option.value === _value
+		);
+		setValue( selectedOption || { label: _value, value: '' } );
+		onChange( _value );
+		if ( selectedOption ) {
+			// eslint-disable-next-line no-console
+			onSelect( selectedOption.value );
+		}
+	};
+
 	const combobox = Ariakit.useComboboxStore( {
-		value: value?.label,
-		setValue: ( value ) => {
-			setValue( options.find( ( option ) => option.value === value ) );
-			onChange( value );
-		},
+		// string tags from label
+		value: value.label?.replace( /<\/?strong>/g, '' ),
+		setValue: onSetValue,
 	} );
 
 	return (
 		<div className="wrapper">
-			<label className="label">
+			<label className="label" htmlFor={ id }>
 				{ label }
 				<Ariakit.Combobox
 					store={ combobox }
-					placeholder="e.g., Apple"
-					className="combobox"
+					placeholder={ __(
+						'Search for an address',
+						'woo-gutenberg-products-block'
+					) }
+					className={ classnames( 'combobox', className ) }
 				/>
 			</label>
 			<Ariakit.ComboboxPopover
@@ -29,13 +71,18 @@ export function SearchCombobox( { className, options, label, onChange } ) {
 				sameWidth
 				className="popover"
 			>
-				{ options.map( ( option ) => (
+				{ options.map( ( option: SearchComboboxOption ) => (
 					<Ariakit.ComboboxItem
 						key={ option.value }
 						className="combobox-item"
 						value={ option.value }
 					>
-						{ option.label }
+						<span
+							dangerouslySetInnerHTML={
+								// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+								{ __html: decodeEntities( option.label ) }
+							}
+						/>
 					</Ariakit.ComboboxItem>
 				) ) }
 			</Ariakit.ComboboxPopover>

@@ -32,12 +32,12 @@ class PredictionsSchema extends AbstractSchema {
 				'items'       => array(
 					'type'       => 'object',
 					'properties' => array(
-						'key'  => array(
+						'value' => array(
 							'description' => __( 'Prediction key.', 'woo-gutenberg-products-block' ),
 							'type'        => 'string',
 							'context'     => array( 'view', 'edit' ),
 						),
-						'text' => array(
+						'label' => array(
 							'description' => __( 'Prediction text.', 'woo-gutenberg-products-block' ),
 							'type'        => 'string',
 							'context'     => array( 'view', 'edit' ),
