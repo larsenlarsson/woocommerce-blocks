@@ -22,6 +22,8 @@ export interface CheckoutResponseSuccess {
 		redirect_url: string;
 	};
 	shipping_address: ShippingAddress;
+	gift_wrapping: boolean;
+	gift_wrapping_note: string;
 	status: string;
 }
 
