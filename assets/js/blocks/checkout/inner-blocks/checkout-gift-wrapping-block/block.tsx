@@ -48,10 +48,7 @@ const Block = ( {
 			giftWrapping: boolean;
 			giftWrappingNote: string;
 		} ) => {
-			if (
-				giftWrappingSelected &&
-				giftWrappingSelected !== currentGiftWrappingSelected
-			) {
+			if ( giftWrappingSelected !== currentGiftWrappingSelected ) {
 				setGiftWrapping( giftWrappingSelected );
 			}
 			if ( newGiftWrappingNote !== currentGiftWrappingNote ) {
