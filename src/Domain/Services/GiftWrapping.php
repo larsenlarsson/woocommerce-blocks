@@ -31,7 +31,7 @@ class GiftWrapping {
 	 * @return void
 	 */
 	public function show_gift_wrapping_on_admin_order_page( \WC_Order $order ) {
-		$gift_wrapping_required = (bool) $order->get_meta( 'woocommerce_blocks_gift_wrapping' );
+		$gift_wrapping_required = (bool) $order->get_meta( 'wc_blocks_gift_wrapping_selected' );
 
 		echo '<div class="wc-blocks-gift-wrapping">';
 		echo '<strong>';
@@ -40,7 +40,7 @@ class GiftWrapping {
 		echo esc_html( $gift_wrapping_required ? esc_html__( 'Yes', 'woo-gutenberg-products-block' ) : esc_html__( 'No', 'woo-gutenberg-products-block' ) );
 
 		if ( $gift_wrapping_required ) {
-			$gift_wrapping_note = $order->get_meta( 'woocommerce_blocks_gift_wrapping_note' );
+			$gift_wrapping_note = $order->get_meta( 'wc_blocks_gift_wrapping_note' );
 			if ( $gift_wrapping_note ) {
 				echo '<br />';
 				echo '<strong>';
@@ -59,8 +59,8 @@ class GiftWrapping {
 	 * @return void
 	 */
 	public function show_gift_wrapping_on_order_confirmation( \WC_Order $order ) {
-		$gift_wrapping_required = (bool) $order->get_meta( 'woocommerce_blocks_gift_wrapping' );
-		$gift_wrapping_note     = $order->get_meta( 'woocommerce_blocks_gift_wrapping_note' );
+		$gift_wrapping_required = (bool) $order->get_meta( 'wc_blocks_gift_wrapping_selected' );
+		$gift_wrapping_note     = $order->get_meta( 'wc_blocks_gift_wrapping_note' );
 
 		echo '<section class="wc-blocks-gift-wrapping">';
 		echo '<h2>' . esc_html__( 'Gift wrapping', 'woo-gutenberg-products-block' ) . '</h2>';
@@ -90,8 +90,8 @@ class GiftWrapping {
 	 * @return void
 	 */
 	public function show_gift_wrapping_in_order_email( \WC_Order $order ) {
-		$gift_wrapping_required = (bool) $order->get_meta( 'woocommerce_blocks_gift_wrapping' );
-		$gift_wrapping_note     = $order->get_meta( 'woocommerce_blocks_gift_wrapping_note' );
+		$gift_wrapping_required = (bool) $order->get_meta( 'wc_blocks_gift_wrapping_selected' );
+		$gift_wrapping_note     = $order->get_meta( 'wc_blocks_gift_wrapping_note' );
 
 		echo '<h2>' . esc_html__( 'Gift wrapping', 'woo-gutenberg-products-block' ) . '</h2>';
 
