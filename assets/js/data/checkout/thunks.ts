@@ -4,6 +4,7 @@
 import type { CheckoutResponse } from '@woocommerce/types';
 import { store as noticesStore } from '@wordpress/notices';
 import { dispatch as wpDispatch, select as wpSelect } from '@wordpress/data';
+import { CartResponse } from '@woocommerce/types';
 
 /**
  * Internal dependencies
@@ -26,6 +27,8 @@ import type {
 } from './types';
 import type { DispatchFromMap } from '../mapped-types';
 import * as actions from './actions';
+import { STORE_KEY as CART_STORE_KEY } from '../cart/constants';
+import { apiFetchWithHeaders } from '../shared-controls';
 
 /**
  * Based on the result of the payment, update the redirect url,
@@ -136,3 +139,40 @@ export const __internalEmitAfterProcessingEvents: emitAfterProcessingEventsType 
 			}
 		};
 	};
+
+/**
+ * Handle changing the gift wrapping option.
+ */
+export const setGiftWrapping = ( giftWrapping: boolean ) => {
+	return async ( { dispatch, registry } ) => {
+		dispatch.__internalIncrementCalculating();
+		dispatch.__internalSetGiftWrapping( giftWrapping );
+
+		const cartDispatch = registry.dispatch( CART_STORE_KEY );
+		try {
+			//dispatch.shippingRatesBeingSelected( true );
+			const { response } = await apiFetchWithHeaders( {
+				path: `/wc/store/v1/cart/select-gift-wrapping`,
+				method: 'POST',
+				data: {
+					gift_wrapping: giftWrapping,
+				},
+				cache: 'no-store',
+			} );
+			// Remove shipping and billing address from the response, so we don't overwrite what the shopper is
+			// entering in the form if rates suddenly appear mid-edit.
+			const {
+				shipping_address: shippingAddress,
+				billing_address: billingAddress,
+				...rest
+			} = response;
+			cartDispatch.receiveCart( rest );
+			return response as CartResponse;
+		} catch ( error ) {
+			cartDispatch.receiveError( error );
+			return Promise.reject( error );
+		} finally {
+			dispatch.__internalDecrementCalculating();
+		}
+	};
+};
