@@ -54,22 +54,24 @@ const CheckoutGiftWrapping = ( {
 				checked={ withGiftWrapping }
 				onChange={ ( isChecked ) => {
 					setWithGiftWrapping( isChecked );
+
 					if ( isChecked ) {
-						if ( value !== hiddenGiftWrappingText ) {
-							onChange( {
-								giftWrapping: true,
-								giftWrappingNote: hiddenGiftWrappingText,
-							} );
-						}
-					} else {
-						// When un-checking the checkbox, clear the gift wrapping message value in
-						// the context but store it in the component state.
+						// When re-enabling the checkbox, store in context the gift wrapping message
+						// value previously stored in the component state.
 						onChange( {
-							giftWrapping: false,
-							giftWrappingNote: '',
+							giftWrapping: true,
+							giftWrappingNote: hiddenGiftWrappingText,
 						} );
-						setHiddenGiftWrappingText( value );
+						return;
 					}
+
+					// When un-checking the checkbox, clear the gift wrapping message value in
+					// the context but store it in the component state.
+					onChange( {
+						giftWrapping: false,
+						giftWrappingNote: '',
+					} );
+					setHiddenGiftWrappingText( value );
 				} }
 			/>
 			{ withGiftWrapping && (
