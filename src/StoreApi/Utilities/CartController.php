@@ -62,6 +62,9 @@ class CartController {
 		}
 		$cart->fees_api()->set_fees( $fees );
 
+		if ( ! $this->get_draft_order() ) {
+			return;
+		}
 		$gift_wrapping_selected_meta = $this->get_draft_order()->get_meta( 'wc_blocks_gift_wrapping_selected' );
 		if ( ! $gift_wrapping_selected_meta ) {
 			return;
