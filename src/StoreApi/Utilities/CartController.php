@@ -37,10 +37,25 @@ class CartController {
 	 */
 	public function calculate_totals() {
 		$cart = $this->get_cart_instance();
+
+		if ( wc()->session->get( 'wc_blocks_gift_wrapping' ) ) {
+			add_filter( 'woocommerce_cart_calculate_fees', [ $this, 'add_gift_wrapping_fee' ] );
+		}
+
 		$cart->get_cart();
 		$cart->calculate_fees();
 		$cart->calculate_shipping();
 		$cart->calculate_totals();
+	}
+
+	/**
+	 * Adds the gift-wrapping fee to the cart.
+	 *
+	 * @param WC_Cart $cart Cart instance.
+	 * @return void
+	 */
+	public function add_gift_wrapping_fee( $cart ) {
+		$cart->add_fee( __( 'Gift wrapping', 'woo-gutenberg-products-block' ), 10 );
 	}
 
 	/**
