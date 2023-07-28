@@ -65,7 +65,14 @@ const siteCurrencySettings: Currency = {
 };
 
 /**
- * Gets currency information in normalized format from an API response or the server.
+ * Get currency presicion.
+ */
+export const getMinorUnit = (): number => {
+	return CURRENCY.precision;
+};
+
+/**
+ * Get currency information in normalized format from an API response or the server.
  *
  * If no currency was provided, or currency_code is empty, the default store currency will be used.
  */
@@ -104,7 +111,7 @@ export const getCurrencyFromPriceResponse = (
 };
 
 /**
- * Gets currency information in normalized format, allowing overrides.
+ * Get currency information in normalized format, allowing overrides.
  */
 export const getCurrency = (
 	currencyData: Partial< Currency > = {}

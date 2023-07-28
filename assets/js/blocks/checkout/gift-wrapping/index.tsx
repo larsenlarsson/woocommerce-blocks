@@ -2,7 +2,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
+import { useState, createInterpolateElement } from '@wordpress/element';
 import { CheckboxControl } from '@woocommerce/blocks-checkout';
 import { Textarea } from '@woocommerce/base-components/textarea';
 
@@ -10,6 +10,7 @@ interface GiftWrappingProps {
 	disabled: boolean;
 	onChange: ( GiftWrapping: string ) => void;
 	placeholder: string;
+	giftWrappingFee?: string;
 	value: string;
 }
 
@@ -17,35 +18,41 @@ const CheckoutGiftWrapping = ( {
 	disabled,
 	onChange,
 	placeholder,
+	giftWrappingFee,
 	value,
 }: GiftWrappingProps ): JSX.Element => {
 	const [ withGiftWrapping, setWithGiftWrapping ] = useState( false );
-	// Store gift wrapping text when the textarea is hidden. This allows us to recover
-	// text entered previously by the user when the checkbox is re-enabled
-	// while keeping the context clean if the checkbox is disabled.
 	const [ hiddenGiftWrappingText, setHiddenGiftWrappingText ] =
 		useState( '' );
+
+	const label = giftWrappingFee
+		? createInterpolateElement(
+				__(
+					'Add gift wrapping to your order <price/>',
+					'woo-gutenberg-products-block'
+				),
+				{
+					price: <span>({ giftWrappingFee })</span>,
+				}
+		  )
+		: __(
+				'Add gift wrapping to your order',
+				'woo-gutenberg-products-block'
+		  );
 
 	return (
 		<div className="wc-block-checkout__gift-wrapping">
 			<CheckboxControl
 				disabled={ disabled }
-				label={ __(
-					'Add gift wrapping to your order',
-					'woo-gutenberg-products-block'
-				) }
+				label={ label }
 				checked={ withGiftWrapping }
 				onChange={ ( isChecked ) => {
 					setWithGiftWrapping( isChecked );
 					if ( isChecked ) {
-						// When re-enabling the checkbox, store in context the gift wrapping message
-						// value previously stored in the component state.
 						if ( value !== hiddenGiftWrappingText ) {
 							onChange( hiddenGiftWrappingText );
 						}
 					} else {
-						// When un-checking the checkbox, clear the gift wrapping message value in
-						// the context but store it in the component state.
 						onChange( '' );
 						setHiddenGiftWrappingText( value );
 					}

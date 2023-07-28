@@ -15,6 +15,10 @@
 			"type": "string",
 			"default": ""
 		},
+		"giftWrappingFee": {
+			"type": "string",
+			"default": "0"
+		},
 		"lock": {
 			"type": "object",
 			"default": {

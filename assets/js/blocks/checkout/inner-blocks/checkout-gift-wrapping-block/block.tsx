@@ -1,19 +1,28 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
 import { __ } from '@wordpress/i18n';
+import classnames from 'classnames';
 import { FormStep } from '@woocommerce/base-components/cart-checkout';
 import { useShippingData } from '@woocommerce/base-context/hooks';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { CHECKOUT_STORE_KEY } from '@woocommerce/block-data';
+import { formatPrice, getMinorUnit } from '@woocommerce/price-format';
 
 /**
  * Internal dependencies
  */
 import CheckoutGiftWrapping from '../../gift-wrapping';
 
-const Block = ( { className }: { className?: string } ): JSX.Element | null => {
+interface BlockProps {
+	className?: string;
+	giftWrappingFee: string;
+}
+
+const Block = ( {
+	className,
+	giftWrappingFee,
+}: BlockProps ): JSX.Element | null => {
 	const { needsShipping } = useShippingData();
 	const { isProcessing: checkoutIsProcessing, giftWrapping } = useSelect(
 		( select ) => {
@@ -25,6 +34,8 @@ const Block = ( { className }: { className?: string } ): JSX.Element | null => {
 		}
 	);
 	const { __internalSetGiftWrapping } = useDispatch( CHECKOUT_STORE_KEY );
+	const fee = parseFloat( giftWrappingFee );
+	const price = fee !== 0 ? fee * 10 ** getMinorUnit() : '';
 
 	if ( ! needsShipping ) {
 		return null;
@@ -47,6 +58,7 @@ const Block = ( { className }: { className?: string } ): JSX.Element | null => {
 					'Add an optional gift wrapping message.',
 					'woo-gutenberg-products-block'
 				) }
+				giftWrappingFee={ formatPrice( price ).trim() }
 				value={ giftWrapping }
 			/>
 		</FormStep>

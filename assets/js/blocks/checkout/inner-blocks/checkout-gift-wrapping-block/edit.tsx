@@ -1,7 +1,9 @@
 /**
  * External dependencies
  */
-import { useBlockProps } from '@wordpress/block-editor';
+import { __ } from '@wordpress/i18n';
+import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
+import { PanelBody, TextControl } from '@wordpress/components';
 import Noninteractive from '@woocommerce/base-components/noninteractive';
 
 /**
@@ -10,12 +12,44 @@ import Noninteractive from '@woocommerce/base-components/noninteractive';
 import Block from './block';
 import './editor.scss';
 
-export const Edit = (): JSX.Element => {
+interface Props {
+	attributes: {
+		giftWrappingFee: string;
+	};
+	setAttributes: ( attributes: Record< string, unknown > ) => void;
+}
+
+export const Edit = ( { attributes, setAttributes }: Props ): JSX.Element => {
+	const { giftWrappingFee } = attributes;
 	const blockProps = useBlockProps();
+
 	return (
 		<div { ...blockProps }>
+			<InspectorControls>
+				<PanelBody
+					title={ __(
+						'Gift Wrapping options',
+						'woo-gutenberg-products-block'
+					) }
+				>
+					<TextControl
+						label={ __(
+							'Gift Wrapping Fee',
+							'woo-gutenberg-products-block'
+						) }
+						value={ giftWrappingFee }
+						onChange={ ( value ) =>
+							setAttributes( { giftWrappingFee: value } )
+						}
+						help={ __(
+							'Format: 0.00',
+							'woo-gutenberg-products-block'
+						) }
+					/>
+				</PanelBody>
+			</InspectorControls>
 			<Noninteractive>
-				<Block />
+				<Block giftWrappingFee={ giftWrappingFee } />
 			</Noninteractive>
 		</div>
 	);
