@@ -18,6 +18,7 @@ interface GiftWrappingProps {
 	placeholder: string;
 	giftWrappingFee?: string;
 	value: string;
+	initialChecked: boolean;
 }
 
 const CheckoutGiftWrapping = ( {
@@ -26,8 +27,10 @@ const CheckoutGiftWrapping = ( {
 	placeholder,
 	giftWrappingFee,
 	value,
+	initialChecked,
 }: GiftWrappingProps ): JSX.Element => {
-	const [ withGiftWrapping, setWithGiftWrapping ] = useState( false );
+	const [ withGiftWrapping, setWithGiftWrapping ] =
+		useState( initialChecked );
 	const [ hiddenGiftWrappingText, setHiddenGiftWrappingText ] =
 		useState( '' );
 
