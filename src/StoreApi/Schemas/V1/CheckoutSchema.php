@@ -65,48 +65,54 @@ class CheckoutSchema extends AbstractSchema {
 	 */
 	public function get_properties() {
 		return [
-			'order_id'          => [
+			'order_id'           => [
 				'description' => __( 'The order ID to process during checkout.', 'woo-gutenberg-products-block' ),
 				'type'        => 'integer',
 				'context'     => [ 'view', 'edit' ],
 				'readonly'    => true,
 			],
-			'status'            => [
+			'status'             => [
 				'description' => __( 'Order status. Payment providers will update this value after payment.', 'woo-gutenberg-products-block' ),
 				'type'        => 'string',
 				'context'     => [ 'view', 'edit' ],
 				'readonly'    => true,
 			],
-			'order_key'         => [
+			'order_key'          => [
 				'description' => __( 'Order key used to check validity or protect access to certain order data.', 'woo-gutenberg-products-block' ),
 				'type'        => 'string',
 				'context'     => [ 'view', 'edit' ],
 				'readonly'    => true,
 			],
-			'order_number'      => [
+			'order_number'       => [
 				'description' => __( 'Order number used for display.', 'woo-gutenberg-products-block' ),
 				'type'        => 'string',
 				'context'     => [ 'view', 'edit' ],
 				'readonly'    => true,
 			],
-			'customer_note'     => [
+			'customer_note'      => [
 				'description' => __( 'Note added to the order by the customer during checkout.', 'woo-gutenberg-products-block' ),
 				'type'        => 'string',
 				'context'     => [ 'view', 'edit' ],
 			],
-			'gift_wrapping'     => [
+			'gift_wrapping'      => [
 				'description' => __( 'Whether the order should be gift-wrapped.', 'woo-gutenberg-products-block' ),
 				'type'        => 'boolean',
 				'context'     => [ 'view', 'edit' ],
 				'optional'    => true,
 			],
-			'customer_id'       => [
+			'gift_wrapping_note' => [
+				'description' => __( 'The note to be included with the gift-wrap.', 'woo-gutenberg-products-block' ),
+				'type'        => 'string',
+				'context'     => [ 'view', 'edit' ],
+				'optional'    => true,
+			],
+			'customer_id'        => [
 				'description' => __( 'Customer ID if registered. Will return 0 for guests.', 'woo-gutenberg-products-block' ),
 				'type'        => 'integer',
 				'context'     => [ 'view', 'edit' ],
 				'readonly'    => true,
 			],
-			'billing_address'   => [
+			'billing_address'    => [
 				'description' => __( 'Billing address.', 'woo-gutenberg-products-block' ),
 				'type'        => 'object',
 				'context'     => [ 'view', 'edit' ],
@@ -117,7 +123,7 @@ class CheckoutSchema extends AbstractSchema {
 				],
 				'required'    => true,
 			],
-			'shipping_address'  => [
+			'shipping_address'   => [
 				'description' => __( 'Shipping address.', 'woo-gutenberg-products-block' ),
 				'type'        => 'object',
 				'context'     => [ 'view', 'edit' ],
@@ -127,7 +133,7 @@ class CheckoutSchema extends AbstractSchema {
 					'validate_callback' => [ $this->shipping_address_schema, 'validate_callback' ],
 				],
 			],
-			'payment_method'    => [
+			'payment_method'     => [
 				'description' => __( 'The ID of the payment method being used to process the payment.', 'woo-gutenberg-products-block' ),
 				'type'        => 'string',
 				'context'     => [ 'view', 'edit' ],
@@ -135,12 +141,12 @@ class CheckoutSchema extends AbstractSchema {
 				// gateways. Further validation occurs during the request.
 				'enum'        => array_values( WC()->payment_gateways->get_payment_gateway_ids() ),
 			],
-			'create_account'    => [
+			'create_account'     => [
 				'description' => __( 'Whether to create a new user account as part of order processing.', 'woo-gutenberg-products-block' ),
 				'type'        => 'boolean',
 				'context'     => [ 'view', 'edit' ],
 			],
-			'payment_result'    => [
+			'payment_result'     => [
 				'description' => __( 'Result of payment processing, or false if not yet processed.', 'woo-gutenberg-products-block' ),
 				'type'        => 'object',
 				'context'     => [ 'view', 'edit' ],
@@ -174,7 +180,7 @@ class CheckoutSchema extends AbstractSchema {
 					],
 				],
 			],
-			self::EXTENDING_KEY => $this->get_extended_schema( self::IDENTIFIER ),
+			self::EXTENDING_KEY  => $this->get_extended_schema( self::IDENTIFIER ),
 		];
 	}
 
@@ -197,22 +203,23 @@ class CheckoutSchema extends AbstractSchema {
 	 */
 	protected function get_checkout_response( \WC_Order $order, PaymentResult $payment_result = null ) {
 		return [
-			'order_id'          => $order->get_id(),
-			'status'            => $order->get_status(),
-			'order_key'         => $order->get_order_key(),
-			'order_number'      => $order->get_order_number(),
-			'customer_note'     => $order->get_customer_note(),
-			'customer_id'       => $order->get_customer_id(),
-			'gift_wrapping'     => (bool) $order->get_meta( 'woocommerce_blocks_gift_wrapping' ),
-			'billing_address'   => (object) $this->billing_address_schema->get_item_response( $order ),
-			'shipping_address'  => (object) $this->shipping_address_schema->get_item_response( $order ),
-			'payment_method'    => $order->get_payment_method(),
-			'payment_result'    => [
+			'order_id'           => $order->get_id(),
+			'status'             => $order->get_status(),
+			'order_key'          => $order->get_order_key(),
+			'order_number'       => $order->get_order_number(),
+			'customer_note'      => $order->get_customer_note(),
+			'customer_id'        => $order->get_customer_id(),
+			'gift_wrapping'      => (bool) $order->get_meta( 'woocommerce_blocks_gift_wrapping' ),
+			'gift_wrapping_note' => (bool) $order->get_meta( 'woocommerce_blocks_gift_wrapping_note' ),
+			'billing_address'    => (object) $this->billing_address_schema->get_item_response( $order ),
+			'shipping_address'   => (object) $this->shipping_address_schema->get_item_response( $order ),
+			'payment_method'     => $order->get_payment_method(),
+			'payment_result'     => [
 				'payment_status'  => $payment_result->status,
 				'payment_details' => $this->prepare_payment_details_for_response( $payment_result->payment_details ),
 				'redirect_url'    => $payment_result->redirect_url,
 			],
-			self::EXTENDING_KEY => $this->get_extended_data( self::IDENTIFIER ),
+			self::EXTENDING_KEY  => $this->get_extended_data( self::IDENTIFIER ),
 		];
 	}
 
