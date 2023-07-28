@@ -1,6 +1,7 @@
 <?php
 namespace Automattic\WooCommerce\Blocks\BlockTypes;
 
+use Automattic\WooCommerce\Blocks\Utils\Utils;
 use Automattic\WooCommerce\StoreApi\Utilities\LocalPickupUtils;
 use Automattic\WooCommerce\Blocks\Utils\CartCheckoutUtils;
 
@@ -33,6 +34,7 @@ class Checkout extends AbstractBlock {
 	protected function initialize() {
 		parent::initialize();
 		add_action( 'wp_loaded', array( $this, 'register_patterns' ) );
+		$this->register_post_save_hooks();
 	}
 
 	/**
@@ -442,6 +444,39 @@ class Checkout extends AbstractBlock {
 		$vendor_chunks = $this->get_chunks_paths( 'vendors--checkout-blocks' );
 		$shared_chunks = [ 'cart-blocks/cart-express-payment--checkout-blocks/express-payment-frontend' ];
 		$this->register_chunk_translations( array_merge( $chunks, $vendor_chunks, $shared_chunks ) );
+	}
+
+	/**
+	 * Register relevant hooks for when the block is saved.
+	 *
+	 * @return void
+	 */
+	protected function register_post_save_hooks() {
+		add_action( 'save_post', [ $this, 'save_gift_wrapping_fee' ], 10, 3 );
+	}
+
+	/**
+	 * Save gift wrapping fee to wp_options when saving the post. This function parses the WP_Post and gets the gift
+	 * wrapping fee from the checkout block.
+	 *
+	 * @param int      $post_id Post ID.
+	 * @param \WP_Post $post Post object.
+	 * @param bool     $update Whether this is an existing post being updated or not.
+	 *
+	 * @return void
+	 */
+	public function save_gift_wrapping_fee( $post_id, $post, $update ) {
+		$checkout_exists = Utils::is_block_present( $post, [ 'woocommerce/checkout' ] );
+		if ( ! $checkout_exists ) {
+			return;
+		}
+		$checkout_block = Utils::get_block( parse_blocks( $post->post_content ), 'woocommerce/checkout-gift-wrapping-block' );
+		if ( ! $checkout_block ) {
+			return;
+		}
+
+		$gift_wrapping_fee = $checkout_block['attrs']['giftWrappingFee'] ?? null;
+		update_option( 'wc_blocks_gift_wrapping_fee', $gift_wrapping_fee );
 	}
 
 	/**
