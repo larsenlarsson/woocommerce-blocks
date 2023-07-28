@@ -39,6 +39,7 @@ export function SearchCombobox( {
 			( option: SearchComboboxOption ) => option.value === _value
 		);
 		setValue( selectedOption || { label: _value, value: '' } );
+		console.log( _value );
 		onChange( _value );
 		if ( selectedOption ) {
 			// eslint-disable-next-line no-console
