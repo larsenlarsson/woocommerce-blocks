@@ -23,7 +23,7 @@
 			"type": "object",
 			"default": {
 				"remove": false,
-				"move": true
+				"move": false
 			}
 		}
 	},

@@ -22,7 +22,9 @@ export type CheckoutState = {
 	// Order notes introduced by the user in the checkout form.
 	orderNotes: string;
 	// Gift wrapping introduced by the user in the checkout form.
-	giftWrapping: string;
+	giftWrapping: boolean;
+	// Gift wrapping note, set by the shopper in the checkout form.
+	giftWrappingNote: string;
 	// This is the ID of the customer the draft order belongs to.
 	customerId: number;
 	// Should the billing form be hidden and inherit the shipping address?
@@ -43,7 +45,8 @@ export const defaultState: CheckoutState = {
 	customerId: checkoutData.customer_id,
 	calculatingCount: 0,
 	orderNotes: '',
-	giftWrapping: '',
+	giftWrapping: false,
+	giftWrappingNote: '',
 	useShippingAsBilling: isSameAddress(
 		checkoutData.billing_address,
 		checkoutData.shipping_address

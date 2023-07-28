@@ -56,6 +56,8 @@ const CheckoutProcessor = () => {
 		isBeforeProcessing: checkoutIsBeforeProcessing,
 		isComplete: checkoutIsComplete,
 		orderNotes,
+		giftWrapping,
+		giftWrappingNote,
 		shouldCreateAccount,
 		extensionData,
 	} = useSelect( ( select ) => {
@@ -68,6 +70,7 @@ const CheckoutProcessor = () => {
 			isComplete: store.isComplete(),
 			orderNotes: store.getOrderNotes(),
 			giftWrapping: store.getGiftWrapping(),
+			giftWrappingNote: store.getGiftWrappingNote(),
 			shouldCreateAccount: store.getShouldCreateAccount(),
 			extensionData: store.getExtensionData(),
 		};
@@ -252,6 +255,8 @@ const CheckoutProcessor = () => {
 				currentBillingAddress.current
 			),
 			customer_note: orderNotes,
+			gift_wrapping: giftWrapping,
+			gift_wrapping_note: giftWrappingNote,
 			create_account: shouldCreateAccount,
 			...paymentData,
 			extensions: { ...extensionData },
@@ -314,6 +319,8 @@ const CheckoutProcessor = () => {
 		shouldSavePayment,
 		activePaymentMethod,
 		orderNotes,
+		giftWrapping,
+		giftWrappingNote,
 		shouldCreateAccount,
 		extensionData,
 		cartNeedsShipping,

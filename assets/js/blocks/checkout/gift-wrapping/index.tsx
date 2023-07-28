@@ -8,7 +8,13 @@ import { Textarea } from '@woocommerce/base-components/textarea';
 
 interface GiftWrappingProps {
 	disabled: boolean;
-	onChange: ( GiftWrapping: string ) => void;
+	onChange: ( {
+		giftWrapping,
+		giftWrappingNote,
+	}: {
+		giftWrapping: boolean;
+		giftWrappingNote: string;
+	} ) => void;
 	placeholder: string;
 	giftWrappingFee?: string;
 	value: string;
@@ -50,10 +56,18 @@ const CheckoutGiftWrapping = ( {
 					setWithGiftWrapping( isChecked );
 					if ( isChecked ) {
 						if ( value !== hiddenGiftWrappingText ) {
-							onChange( hiddenGiftWrappingText );
+							onChange( {
+								giftWrapping: true,
+								giftWrappingNote: hiddenGiftWrappingText,
+							} );
 						}
 					} else {
-						onChange( '' );
+						// When un-checking the checkbox, clear the gift wrapping message value in
+						// the context but store it in the component state.
+						onChange( {
+							giftWrapping: false,
+							giftWrappingNote: '',
+						} );
 						setHiddenGiftWrappingText( value );
 					}
 				} }
@@ -61,7 +75,12 @@ const CheckoutGiftWrapping = ( {
 			{ withGiftWrapping && (
 				<Textarea
 					disabled={ disabled }
-					onTextChange={ onChange }
+					onTextChange={ ( text ) => {
+						onChange( {
+							giftWrapping: withGiftWrapping,
+							giftWrappingNote: text,
+						} );
+					} }
 					placeholder={ placeholder }
 					value={ value }
 				/>

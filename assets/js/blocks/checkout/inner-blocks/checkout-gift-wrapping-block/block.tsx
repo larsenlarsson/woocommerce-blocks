@@ -8,6 +8,7 @@ import { useShippingData } from '@woocommerce/base-context/hooks';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { CHECKOUT_STORE_KEY } from '@woocommerce/block-data';
 import { formatPrice, getMinorUnit } from '@woocommerce/price-format';
+import { useCallback } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -24,16 +25,46 @@ const Block = ( {
 	giftWrappingFee,
 }: BlockProps ): JSX.Element | null => {
 	const { needsShipping } = useShippingData();
-	const { isProcessing: checkoutIsProcessing, giftWrapping } = useSelect(
-		( select ) => {
-			const store = select( CHECKOUT_STORE_KEY );
-			return {
-				isProcessing: store.isProcessing(),
-				giftWrapping: store.getGiftWrapping(),
-			};
-		}
+	const {
+		isProcessing: checkoutIsProcessing,
+		currentGiftWrappingNote,
+		currentGiftWrappingSelected,
+	} = useSelect( ( select ) => {
+		const store = select( CHECKOUT_STORE_KEY );
+		return {
+			isProcessing: store.isProcessing(),
+			currentGiftWrappingNote: store.getGiftWrappingNote(),
+			currentGiftWrappingSelected: store.getGiftWrapping(),
+		};
+	} );
+	const { setGiftWrapping, setGiftWrappingNote } =
+		useDispatch( CHECKOUT_STORE_KEY );
+
+	const onChangeHandler = useCallback(
+		( {
+			giftWrapping: giftWrappingSelected,
+			giftWrappingNote: newGiftWrappingNote,
+		}: {
+			giftWrapping: boolean;
+			giftWrappingNote: string;
+		} ) => {
+			if (
+				giftWrappingSelected &&
+				giftWrappingSelected !== currentGiftWrappingSelected
+			) {
+				setGiftWrapping( giftWrappingSelected );
+			}
+			if ( newGiftWrappingNote !== currentGiftWrappingNote ) {
+				setGiftWrappingNote( newGiftWrappingNote );
+			}
+		},
+		[
+			setGiftWrapping,
+			setGiftWrappingNote,
+			currentGiftWrappingSelected,
+			currentGiftWrappingNote,
+		]
 	);
-	const { __internalSetGiftWrapping } = useDispatch( CHECKOUT_STORE_KEY );
 	const fee = parseFloat( giftWrappingFee );
 	const price = fee !== 0 ? fee * 10 ** getMinorUnit() : '';
 
@@ -53,13 +84,13 @@ const Block = ( {
 		>
 			<CheckoutGiftWrapping
 				disabled={ checkoutIsProcessing }
-				onChange={ __internalSetGiftWrapping }
+				onChange={ onChangeHandler }
 				placeholder={ __(
 					'Add an optional gift wrapping message.',
 					'woo-gutenberg-products-block'
 				) }
 				giftWrappingFee={ formatPrice( price ).trim() }
-				value={ giftWrapping }
+				value={ currentGiftWrappingNote }
 			/>
 		</FormStep>
 	);

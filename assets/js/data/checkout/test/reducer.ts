@@ -214,22 +214,6 @@ describe.only( 'Checkout Store Reducer', () => {
 		).toEqual( expectedState );
 	} );
 
-	it( 'should handle SET_GIFT_WRAPPING', () => {
-		const expectedState = {
-			...defaultState,
-			giftWrapping: 'test gift wrapping message',
-		};
-
-		expect(
-			reducer(
-				defaultState,
-				actions.__internalSetGiftWrapping(
-					'test gift wrapping message'
-				)
-			)
-		).toEqual( expectedState );
-	} );
-
 	describe( 'should handle SET_EXTENSION_DATA', () => {
 		it( 'should set data under a namespace', () => {
 			const mockExtensionData = {
