@@ -59,4 +59,26 @@ class Utils {
 		return count( $intersected_block_names ) === count( $block_names );
 	}
 
+	/**
+	 * Get the block with the given name from the parsed blocks.
+	 *
+	 * @param array  $parsed_blocks The parsed blocks.
+	 * @param string $block_name The name of the block to get.
+	 * @return array|null The block if found, null otherwise.
+	 */
+	public static function get_block( $parsed_blocks, $block_name ) {
+		foreach ( $parsed_blocks as $block ) {
+			if ( $block['blockName'] === $block_name ) {
+				return $block;
+			}
+			if ( count( $block['innerBlocks'] ) > 0 ) {
+				$inner_block = self::get_block( $block['innerBlocks'], $block_name );
+				if ( $inner_block ) {
+					return $inner_block;
+				}
+			}
+		}
+		// We got to the end of the list of blocks and no block was found.
+		return null;
+	}
 }
