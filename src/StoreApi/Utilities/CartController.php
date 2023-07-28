@@ -55,7 +55,8 @@ class CartController {
 	 * @return void
 	 */
 	public function add_gift_wrapping_fee( $cart ) {
-		$cart->add_fee( __( 'Gift wrapping', 'woo-gutenberg-products-block' ), 10 );
+		$fee = get_option( 'wc_blocks_gift_wrapping_fee', 0 );
+		$cart->add_fee( __( 'Gift wrapping', 'woo-gutenberg-products-block' ), $fee );
 	}
 
 	/**
