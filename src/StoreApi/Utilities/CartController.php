@@ -915,6 +915,25 @@ class CartController {
 	}
 
 	/**
+	 * Selects or deselects gift wrapping.
+	 *
+	 * @param array $request Request data.
+	 */
+	public function select_gift_wrapping( $request ) {
+		$draft_order = $this->get_draft_order();
+
+		$gift_wrapping_meta_value = (bool) $draft_order->get_meta( 'wc_blocks_gift_wrapping_selected' );
+
+		if ( isset( $request['gift_wrapping'] ) ) {
+			$draft_order->update_meta_data( 'wc_blocks_gift_wrapping_selected', (bool) $request['gift_wrapping'] );
+		} elseif ( true === $gift_wrapping_meta_value ) {
+			$draft_order->update_meta_data( 'wc_blocks_gift_wrapping_selected', false );
+		}
+		$draft_order->save();
+		$this->calculate_totals();
+	}
+
+	/**
 	 * Based on the core cart class but returns errors rather than rendering notices directly.
 	 *
 	 * @todo Overriding the core apply_coupon method was necessary because core outputs notices when a coupon gets
