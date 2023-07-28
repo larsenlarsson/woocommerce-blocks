@@ -55,16 +55,9 @@ class CartSelectGiftWrapping extends AbstractCartRoute {
 	 * @return \WP_REST_Response
 	 */
 	protected function get_route_post_response( \WP_REST_Request $request ) {
-		$cart_controller             = new CartController();
-		$gift_wrapping_session_value = (bool) wc()->session->get( 'wc_blocks_gift_wrapping' );
+		$cart_controller = new CartController();
+		$draft_order     = $cart_controller->select_gift_wrapping( $request );
 
-		if ( isset( $request['gift_wrapping'] ) && $request['gift_wrapping'] ) {
-			wc()->session->set( 'wc_blocks_gift_wrapping', (bool) $request['gift_wrapping'] );
-		}
-		if ( true === $gift_wrapping_session_value ) {
-			wc()->session->set( 'wc_blocks_gift_wrapping', false );
-		}
-		$cart_controller->calculate_totals();
 		return rest_ensure_response( $this->schema->get_item_response( $cart_controller->get_cart_instance() ) );
 	}
 }
