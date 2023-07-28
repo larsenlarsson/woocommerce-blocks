@@ -21,4 +21,42 @@ class Utils {
 
 		return version_compare( $current_wp_version, $version, $operator );
 	}
+
+	/**
+	 * Checks whether the given blocks are present in the post content.
+	 *
+	 * @param \WP_Post $post A post to check for block presence.
+	 * @param array    $block_names An array of block names to look for.
+	 * @param string   $operator Either OR, or AND. Determines whether all blocks must be present, or just one.
+	 *
+	 * @return bool True if the blocks are present and the operator is satisfied, false otherwise.
+	 */
+	public static function is_block_present( $post, $block_names = [], $operator = 'OR' ) {
+
+		// Reset the operator to 'OR' if an invalid one is passed.
+		if ( in_array( $operator, [ 'AND', 'OR' ], true ) ) {
+			_doing_it_wrong( __METHOD__, esc_html__( 'Invalid operator passed. Defaulting to OR.', 'woo-gutenberg-products-block' ), 'X.X.X' );
+			$operator = 'OR';
+		}
+
+		if ( ! has_blocks( $post->post_content ) ) {
+			return false;
+		}
+		$blocks              = parse_blocks( $post->post_content );
+		$present_block_names = array_map(
+			function ( $block ) {
+				return $block['blockName'];
+			},
+			$blocks
+		);
+
+		$intersected_block_names = array_intersect( $block_names, $present_block_names );
+
+		if ( 'OR' === $operator ) {
+			return $intersected_block_names > 0;
+		}
+
+		return count( $intersected_block_names ) === count( $block_names );
+	}
+
 }
