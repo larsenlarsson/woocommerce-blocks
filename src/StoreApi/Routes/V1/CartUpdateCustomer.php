@@ -181,8 +181,8 @@ class CartUpdateCustomer extends AbstractCartRoute {
 				if ( in_array( 'postal_code', $component['types'], true ) ) {
 					$billing['postcode'] = $component['long_name'];
 				}
-				if ( in_array( 'administrative_area_level_1', $component['types'], true ) ) {
-					$billing['state'] = $component['long_name'];
+				if ( in_array( 'administrative_area_level_2', $component['types'], true ) ) {
+					$billing['state'] = $component['short_name'];
 				}
 				if ( in_array( 'locality', $component['types'], true ) ) {
 					$billing['city'] = $component['long_name'];

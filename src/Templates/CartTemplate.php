@@ -33,6 +33,11 @@ class CartTemplate extends AbstractPageTemplate {
 	 */
 	protected function is_active_template() {
 		global $post;
+
+		if ( ! $post ) {
+			return false;
+		}
+
 		return get_option( 'woocommerce_cart_page_endpoint' ) === $post->post_name;
 	}
 

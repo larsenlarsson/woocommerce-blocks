@@ -42,6 +42,11 @@ class CheckoutTemplate extends AbstractPageTemplate {
 	 */
 	public function is_active_template() {
 		global $post;
+
+		if ( ! $post ) {
+			return false;
+		}
+
 		return get_option( 'woocommerce_checkout_page_endpoint' ) === $post->post_name;
 	}
 }

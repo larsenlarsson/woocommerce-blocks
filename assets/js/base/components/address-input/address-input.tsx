@@ -6,6 +6,10 @@ import { decodeEntities } from '@wordpress/html-entities';
 import { useState, useEffect, useRef } from '@wordpress/element';
 import classnames from 'classnames';
 import { ValidatedTextInput } from '@woocommerce/blocks-checkout';
+import { dispatch } from '@wordpress/data';
+import { CART_STORE_KEY, processErrorResponse } from '@woocommerce/block-data';
+import { removeAllNotices } from '@woocommerce/base-utils';
+
 /**
  * Internal dependencies
  */
@@ -48,6 +52,32 @@ const AddressInput = ( {
 			label: 'Rambla de Santa Cruz, 25, Santa Cruz de Tenerife, Spain',
 		},
 	] );
+	const persistPlace = ( props ) => {
+		dispatch( CART_STORE_KEY )
+			.updateCustomerData(
+				{
+					billing_address: { place_id: props },
+				},
+				false
+			)
+			.then( removeAllNotices )
+			.catch( ( response ) => {
+				processErrorResponse( response );
+			} );
+	};
+	const persistAddress = ( props ) => {
+		dispatch( CART_STORE_KEY )
+			.updateCustomerData(
+				{
+					billing_address: { place_id: props },
+				},
+				false
+			)
+			.then( removeAllNotices )
+			.catch( ( response ) => {
+				processErrorResponse( response );
+			} );
+	};
 
 	if ( addressAutocompleteEnabled ) {
 		return (
@@ -60,8 +90,6 @@ const AddressInput = ( {
 				<SearchCombobox
 					id={ id }
 					label={ label }
-					onChange={ ( ...props ) => console.log( props ) }
-					onF
 					options={ options }
 					value={ value }
 					errorId={ errorId }

@@ -3,12 +3,14 @@
  */
 import * as Ariakit from '@ariakit/react';
 
-export function SearchCombobox( { className, options, label } ) {
+export function SearchCombobox( { className, options, label, onChange } ) {
 	const [ value, setValue ] = React.useState( {} );
 	const combobox = Ariakit.useComboboxStore( {
 		value: value?.label,
-		setValue: ( value ) =>
-			setValue( options.find( ( option ) => option.label === value ) ),
+		setValue: ( value ) => {
+			setValue( options.find( ( option ) => option.value === value ) );
+			onChange( value );
+		},
 	} );
 
 	return (

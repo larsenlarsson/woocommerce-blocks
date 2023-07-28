@@ -465,6 +465,8 @@ export const updateCustomerData =
 				data: customerData,
 				cache: 'no-store',
 			} );
+			console.log( '- Log city:', response.billing_address.city );
+			console.log( '- Log country:', response.billing_address.country );
 			if ( editing ) {
 				dispatch.receiveCartContents( response );
 			} else {
