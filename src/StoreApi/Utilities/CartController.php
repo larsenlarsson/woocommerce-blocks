@@ -36,12 +36,9 @@ class CartController {
 	 * Recalculates the cart totals.
 	 */
 	public function calculate_totals() {
+		add_filter( 'woocommerce_cart_calculate_fees', [ $this, 'add_gift_wrapping_fee' ] );
+
 		$cart = $this->get_cart_instance();
-
-		if ( wc()->session->get( 'wc_blocks_gift_wrapping' ) ) {
-			add_filter( 'woocommerce_cart_calculate_fees', [ $this, 'add_gift_wrapping_fee' ] );
-		}
-
 		$cart->get_cart();
 		$cart->calculate_fees();
 		$cart->calculate_shipping();
