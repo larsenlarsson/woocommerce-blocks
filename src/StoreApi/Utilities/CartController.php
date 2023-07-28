@@ -55,6 +55,20 @@ class CartController {
 	 * @return void
 	 */
 	public function add_gift_wrapping_fee( $cart ) {
+
+		// Remove any existing gift wrapping fees before resetting it, to avoid duplicates or to remove it.
+		$fees = $cart->get_fees();
+		foreach ( $fees as $key => $fee ) {
+			if ( __( 'Gift wrapping', 'woo-gutenberg-products-block' ) === $fees[ $key ]->name ) {
+				unset( $fees[ $key ] );
+			}
+		}
+		$cart->fees_api()->set_fees( $fees );
+
+		$gift_wrapping_selected_meta = $this->get_draft_order()->get_meta( 'wc_blocks_gift_wrapping_selected' );
+		if ( ! $gift_wrapping_selected_meta ) {
+			return;
+		}
 		$fee = get_option( 'wc_blocks_gift_wrapping_fee', 0 );
 		$cart->add_fee( __( 'Gift wrapping', 'woo-gutenberg-products-block' ), $fee );
 	}
