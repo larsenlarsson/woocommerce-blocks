@@ -214,6 +214,31 @@ describe.only( 'Checkout Store Reducer', () => {
 		).toEqual( expectedState );
 	} );
 
+	it( 'should handle SET_GIFT_WRAPPING', () => {
+		const expectedState = {
+			...defaultState,
+			giftWrapping: true,
+		};
+
+		expect(
+			reducer( defaultState, actions.__internalSetGiftWrapping( true ) )
+		).toEqual( expectedState );
+	} );
+
+	it( 'should handle SET_GIFT_WRAPPING_NOTE', () => {
+		const expectedState = {
+			...defaultState,
+			giftWrappingNote: 'test gift wrapping note',
+		};
+
+		expect(
+			reducer(
+				defaultState,
+				actions.setGiftWrappingNote( 'test gift wrapping note' )
+			)
+		).toEqual( expectedState );
+	} );
+
 	describe( 'should handle SET_EXTENSION_DATA', () => {
 		it( 'should set data under a namespace', () => {
 			const mockExtensionData = {
