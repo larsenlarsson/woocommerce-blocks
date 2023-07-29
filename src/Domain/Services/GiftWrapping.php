@@ -33,7 +33,7 @@ class GiftWrapping {
 	public function show_gift_wrapping_on_admin_order_page( \WC_Order $order ) {
 		$gift_wrapping_required = (bool) $order->get_meta( 'woocommerce_blocks_gift_wrapping' );
 
-		echo '<div class="wc-blocks-gift-wrapping">';
+		echo '<p class="wc-blocks-gift-wrapping">';
 		echo '<strong>';
 		echo esc_html__( 'Gift wrapping required', 'woo-gutenberg-products-block' );
 		echo '</strong>: ';
@@ -49,7 +49,7 @@ class GiftWrapping {
 				echo esc_html( $gift_wrapping_note );
 			}
 		}
-		echo '</div>';
+		echo '</p>';
 	}
 
 	/**
