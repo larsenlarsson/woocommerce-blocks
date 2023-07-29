@@ -45,7 +45,7 @@ export const defaultState: CheckoutState = {
 	customerId: checkoutData.customer_id,
 	calculatingCount: 0,
 	orderNotes: '',
-	giftWrapping: false,
+	giftWrapping: !! checkoutData.gift_wrapping,
 	giftWrappingNote: '',
 	useShippingAsBilling: isSameAddress(
 		checkoutData.billing_address,

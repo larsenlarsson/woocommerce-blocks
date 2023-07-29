@@ -88,6 +88,7 @@ const Block = ( {
 				) }
 				giftWrappingFee={ formatPrice( price ).trim() }
 				value={ currentGiftWrappingNote }
+				initialChecked={ currentGiftWrappingSelected }
 			/>
 		</FormStep>
 	);
