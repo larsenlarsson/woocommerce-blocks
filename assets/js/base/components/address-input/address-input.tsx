@@ -47,15 +47,6 @@ const AddressInput = ( {
 	};
 	useEffect( () => {
 		async function fetchData( type: string ) {
-			// If controller is defined, abort the previous fetch
-			if ( controller !== undefined ) {
-				controller.abort();
-			}
-
-			// Create a new controller
-			controller = new AbortController();
-			const signal = controller.signal;
-
 			try {
 				const response = await fetch(
 					'/wp-json/wc/store/v1/cart/address-prediction?text=' +
@@ -64,7 +55,6 @@ const AddressInput = ( {
 					{
 						method: 'GET',
 						cache: 'no-store',
-						signal,
 					}
 				);
 
