@@ -34,31 +34,31 @@ class CartUpdateCustomer extends AbstractCartRoute {
 	 * @return array An array of endpoints.
 	 */
 	public function get_args() {
-		return [
-			[
+		return array(
+			array(
 				'methods'             => \WP_REST_Server::CREATABLE,
-				'callback'            => [ $this, 'get_response' ],
+				'callback'            => array( $this, 'get_response' ),
 				'permission_callback' => '__return_true',
-				'args'                => [
-					'billing_address'  => [
+				'args'                => array(
+					'billing_address'  => array(
 						'description'       => __( 'Billing address.', 'woo-gutenberg-products-block' ),
 						'type'              => 'object',
-						'context'           => [ 'view', 'edit' ],
+						'context'           => array( 'view', 'edit' ),
 						'properties'        => $this->schema->billing_address_schema->get_properties(),
 						'sanitize_callback' => null,
-					],
-					'shipping_address' => [
+					),
+					'shipping_address' => array(
 						'description'       => __( 'Shipping address.', 'woo-gutenberg-products-block' ),
 						'type'              => 'object',
-						'context'           => [ 'view', 'edit' ],
+						'context'           => array( 'view', 'edit' ),
 						'properties'        => $this->schema->shipping_address_schema->get_properties(),
 						'sanitize_callback' => null,
-					],
-				],
-			],
-			'schema'      => [ $this->schema, 'get_public_item_schema' ],
-			'allow_batch' => [ 'v1' => true ],
-		];
+					),
+				),
+			),
+			'schema'      => array( $this->schema, 'get_public_item_schema' ),
+			'allow_batch' => array( 'v1' => true ),
+		);
 	}
 
 	/**
@@ -102,11 +102,11 @@ class CartUpdateCustomer extends AbstractCartRoute {
 				'rest_invalid_param',
 				/* translators: %s: List of invalid parameters. */
 				sprintf( __( 'Invalid parameter(s): %s', 'woo-gutenberg-products-block' ), implode( ', ', array_keys( $invalid_params ) ) ),
-				[
+				array(
 					'status'  => 400,
 					'params'  => $invalid_params,
 					'details' => $invalid_details,
-				]
+				)
 			);
 		}
 
@@ -126,7 +126,7 @@ class CartUpdateCustomer extends AbstractCartRoute {
 		// Get data from request object and merge with customer object, then sanitize.
 		$billing  = $this->schema->billing_address_schema->sanitize_callback(
 			wp_parse_args(
-				$request['billing_address'] ?? [],
+				$request['billing_address'] ?? array(),
 				$this->get_customer_billing_address( $customer )
 			),
 			$request,
@@ -134,7 +134,7 @@ class CartUpdateCustomer extends AbstractCartRoute {
 		);
 		$shipping = $this->schema->billing_address_schema->sanitize_callback(
 			wp_parse_args(
-				$request['shipping_address'] ?? [],
+				$request['shipping_address'] ?? array(),
 				$this->get_customer_shipping_address( $customer )
 			),
 			$request,
@@ -142,8 +142,8 @@ class CartUpdateCustomer extends AbstractCartRoute {
 		);
 
 		if ( isset( $billing['place_id'] ) ) {
-			$api_key  = get_option( 'woocommerce_google_maps_api_key', '' );
-			$url      = add_query_arg(
+			$api_key = get_option( 'woocommerce_google_maps_api_key', '' );
+			$url     = add_query_arg(
 				array(
 					'place_id' => $billing['place_id'],
 					'key'      => $api_key,
@@ -151,7 +151,13 @@ class CartUpdateCustomer extends AbstractCartRoute {
 				),
 				'https://maps.googleapis.com/maps/api/place/details/json'
 			);
-			$response = wp_remote_get( $url );
+
+			$start_time     = microtime( true );
+			$response       = wp_remote_get( $url );
+			$end_time       = microtime( true );
+			$duration       = $end_time - $start_time;
+			$wp_rest_server = \rest_get_server();
+			$wp_rest_server->send_header( 'X-Google-Maps-API-Duration', $duration );
 
 			if ( is_wp_error( $response ) ) {
 				return array();
@@ -286,7 +292,7 @@ class CartUpdateCustomer extends AbstractCartRoute {
 		if ( ! $validation_util->validate_state( $billing_state, $billing_country ) ) {
 			$billing_state = '';
 		}
-		return [
+		return array(
 			'first_name' => $customer->get_billing_first_name(),
 			'last_name'  => $customer->get_billing_last_name(),
 			'company'    => $customer->get_billing_company(),
@@ -298,7 +304,7 @@ class CartUpdateCustomer extends AbstractCartRoute {
 			'country'    => $billing_country,
 			'phone'      => $customer->get_billing_phone(),
 			'email'      => $customer->get_billing_email(),
-		];
+		);
 	}
 
 	/**
@@ -308,7 +314,7 @@ class CartUpdateCustomer extends AbstractCartRoute {
 	 * @return array
 	 */
 	protected function get_customer_shipping_address( \WC_Customer $customer ) {
-		return [
+		return array(
 			'first_name' => $customer->get_shipping_first_name(),
 			'last_name'  => $customer->get_shipping_last_name(),
 			'company'    => $customer->get_shipping_company(),
@@ -319,6 +325,6 @@ class CartUpdateCustomer extends AbstractCartRoute {
 			'postcode'   => $customer->get_shipping_postcode(),
 			'country'    => $customer->get_shipping_country(),
 			'phone'      => $customer->get_shipping_phone(),
-		];
+		);
 	}
 }

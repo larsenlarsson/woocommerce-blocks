@@ -15,7 +15,7 @@ class GoogleAddressPrediction {
 			return array();
 		}
 
-		$url = add_query_arg(
+		$url            = add_query_arg(
 			array(
 				'key'          => $api_key,
 				'input'        => $text,
@@ -23,8 +23,12 @@ class GoogleAddressPrediction {
 			),
 			'https://maps.googleapis.com/maps/api/place/autocomplete/json'
 		);
-
-		$response = wp_remote_get( $url );
+		$start_time     = microtime( true );
+		$response       = wp_remote_get( $url );
+		$end_time       = microtime( true );
+		$duration       = $end_time - $start_time;
+		$wp_rest_server = \rest_get_server();
+		$wp_rest_server->send_header( 'X-Google-Maps-API-Duration', $duration );
 		if ( is_wp_error( $response ) ) {
 			return array();
 		}
