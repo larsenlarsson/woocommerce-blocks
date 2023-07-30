@@ -43,7 +43,8 @@
 			.wc-block-components-address-form__company,
 			.wc-block-components-address-form__address_1,
 			.wc-block-components-address-form__address_2,
-			.wc-block-components-address-input {
+			.wc-block-components-address-input,
+			.wc-block-components-search-input {
 				width: calc(100% - #{$gap-small});
 			}
 

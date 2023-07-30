@@ -39,7 +39,6 @@ export function SearchCombobox( {
 			( option: SearchComboboxOption ) => option.value === _value
 		);
 		setValue( selectedOption || { label: _value, value: '' } );
-		console.log( _value );
 		onChange( _value );
 		if ( selectedOption ) {
 			// eslint-disable-next-line no-console
@@ -52,41 +51,64 @@ export function SearchCombobox( {
 		value: value.label?.replace( /<\/?strong>/g, '' ),
 		setValue: onSetValue,
 	} );
-
+	console.log( options.length );
 	return (
-		<div className="wrapper">
-			<label className="label" htmlFor={ id }>
-				{ label }
+		<div
+			className={ classnames( 'wc-block-components-combobox is-active' ) }
+		>
+			<div className="components-base-control wc-block-components-combobox-control components-combobox-control css-wdf2ti-Wrapper e1puf3u3">
+				<label
+					className="components-base-control__label css-13ck15n-StyledLabel e1puf3u1"
+					htmlFor={ id }
+				>
+					{ label }
+				</label>
 				<Ariakit.Combobox
 					store={ combobox }
 					placeholder={ __(
 						'Search for an address',
 						'woo-gutenberg-products-block'
 					) }
-					className={ classnames( 'combobox', className ) }
+					className={ classnames(
+						'wc-block-components-combobox-control',
+						'components-combobox-control__input',
+						className
+					) }
 				/>
-			</label>
-			<Ariakit.ComboboxPopover
-				store={ combobox }
-				gutter={ 4 }
-				sameWidth
-				className="popover"
-			>
-				{ options.map( ( option: SearchComboboxOption ) => (
-					<Ariakit.ComboboxItem
-						key={ option.value }
-						className="combobox-item"
-						value={ option.value }
+				{ options.length > 0 && (
+					<Ariakit.ComboboxPopover
+						store={ combobox }
+						gutter={ 4 }
+						sameWidth
+						className={ classnames(
+							'popover',
+							'components-form-token-field__suggestions-list'
+						) }
 					>
-						<span
-							dangerouslySetInnerHTML={
-								// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
-								{ __html: decodeEntities( option.label ) }
-							}
-						/>
-					</Ariakit.ComboboxItem>
-				) ) }
-			</Ariakit.ComboboxPopover>
+						{ options.map( ( option: SearchComboboxOption ) => (
+							<Ariakit.ComboboxItem
+								key={ option.value }
+								className={ classnames(
+									'combobox-item',
+									'components-form-token-field__suggestion'
+								) }
+								value={ option.value }
+							>
+								<span
+									dangerouslySetInnerHTML={
+										// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+										{
+											__html: decodeEntities(
+												option.label
+											),
+										}
+									}
+								/>
+							</Ariakit.ComboboxItem>
+						) ) }
+					</Ariakit.ComboboxPopover>
+				) }
+			</div>
 		</div>
 	);
 }

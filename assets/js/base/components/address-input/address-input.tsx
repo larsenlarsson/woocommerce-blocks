@@ -85,7 +85,8 @@ const AddressInput = ( {
 			<div
 				className={ classnames(
 					className,
-					'wc-block-components-country-input'
+					'wc-block-components-text-input',
+					'wc-block-components-search-input'
 				) }
 			>
 				<SearchCombobox
