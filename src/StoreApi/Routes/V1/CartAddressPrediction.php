@@ -9,7 +9,7 @@ use Automattic\WooCommerce\StoreApi\Utilities\GoogleAddressPrediction;
  *
  * Get Google Prediction API address suggestions for a given address.
  */
-class CartAddressPrediction extends AbstractCartRoute {
+class CartAddressPrediction extends AbstractRoute {
 	/**
 	 * The route identifier.
 	 *
