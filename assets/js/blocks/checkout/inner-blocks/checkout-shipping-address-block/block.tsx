@@ -52,6 +52,7 @@ const Block = ( {
 		setBillingAddress,
 		shippingAddress,
 		billingAddress,
+		setBillingPhone,
 		setShippingPhone,
 		useShippingAsBilling,
 		setUseShippingAsBilling,
@@ -156,6 +157,12 @@ const Block = ( {
 						value={ shippingAddress.phone }
 						onChange={ ( value ) => {
 							setShippingPhone( value );
+							if ( useShippingAsBilling ) {
+								setBillingPhone( value );
+								dispatchCheckoutEvent( 'set-phone-number', {
+									step: 'biling',
+								} );
+							}
 							dispatchCheckoutEvent( 'set-phone-number', {
 								step: 'shipping',
 							} );
