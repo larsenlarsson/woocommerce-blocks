@@ -136,7 +136,9 @@ export class FrontendUtils {
 
 	async isLoggedIn() {
 		await this.gotoMyAccount();
-		await expect( this.page ).toHaveTitle( /My account/ );
+		await expect( this.page ).toHaveTitle(
+			/My Account – WooCommerce Blocks E2E Test Suite/
+		);
 		const loginForm = this.page.locator( 'form.woocommerce-form-login' );
 
 		return ! loginForm;
@@ -144,7 +146,9 @@ export class FrontendUtils {
 
 	async login() {
 		await this.gotoMyAccount();
-		await expect( this.page ).toHaveTitle( /My account/ );
+		await expect( this.page ).toHaveTitle(
+			/My Account – WooCommerce Blocks E2E Test Suite/
+		);
 		await this.page
 			.locator( 'input[name="username"]' )
 			.fill( customer.username );
@@ -158,7 +162,9 @@ export class FrontendUtils {
 
 	async logout() {
 		await this.gotoMyAccount();
-		await expect( this.page ).toHaveTitle( /My account/ );
+		await expect( this.page ).toHaveTitle(
+			/My Account – WooCommerce Blocks E2E Test Suite/
+		);
 		await this.page.locator( 'text=Log out' ).click();
 	}
 }
