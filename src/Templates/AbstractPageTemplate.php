@@ -24,6 +24,7 @@ abstract class AbstractPageTemplate {
 	protected function init() {
 		add_filter( 'page_template_hierarchy', array( $this, 'page_template_hierarchy' ), 1 );
 		add_action( 'current_screen', array( $this, 'page_template_editor_redirect' ) );
+		add_filter( 'parse_query', array( $this, 'page_template_hide_pages' ) );
 		add_filter( 'pre_get_document_title', array( $this, 'page_template_title' ) );
 	}
 
@@ -93,6 +94,25 @@ abstract class AbstractPageTemplate {
 			wp_safe_redirect( $this->get_edit_template_url() );
 			exit;
 		}
+	}
+
+	/**
+	 * Hide pages from the page list when assigned to templates.
+	 *
+	 * @param \WP_Query $query Query object.
+	 * @return \WP_Query
+	 */
+	public function page_template_hide_pages( $query ) {
+		global $pagenow, $post_type;
+
+		if ( is_admin() && 'edit.php' === $pagenow && 'page' === $post_type ) {
+			$page = $this->get_placeholder_page();
+			if ( $page ) {
+				$query->query_vars['post__not_in'] = array_merge( (array) $query->query_vars['post__not_in'], [ $page->ID ] );
+			}
+		}
+
+		return $query;
 	}
 
 	/**
