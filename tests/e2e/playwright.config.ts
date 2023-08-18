@@ -45,6 +45,7 @@ const config: ExtendedPlaywrightTestConfig = {
 		{
 			name: 'blockThemeConfiguration',
 			testMatch: /block-theme.setup.ts/,
+			dependencies: [ 'authSetup' ],
 		},
 		{
 			name: 'blockTheme',
@@ -54,11 +55,17 @@ const config: ExtendedPlaywrightTestConfig = {
 		{
 			name: 'classicThemeConfiguration',
 			testMatch: /classic-theme.setup.ts/,
+			dependencies: [ 'authSetup' ],
 		},
 		{
 			name: 'classicTheme',
 			testMatch: /.*.classic_theme.spec.ts/,
 			dependencies: [ 'classicThemeConfiguration' ],
+		},
+		{
+			name: 'authSetup',
+			testDir: '.',
+			testMatch: /auth.setup.ts/,
 		},
 	],
 };
