@@ -8,6 +8,7 @@ use Automattic\WooCommerce\Blocks\BlockPatterns;
 use Automattic\WooCommerce\Blocks\BlockTemplatesController;
 use Automattic\WooCommerce\Blocks\BlockTypesController;
 use Automattic\WooCommerce\Blocks\Domain\Services\CreateAccount;
+use Automattic\WooCommerce\Blocks\Domain\Services\JetpackWooCommerceAnalytics;
 use Automattic\WooCommerce\Blocks\Domain\Services\Notices;
 use Automattic\WooCommerce\Blocks\Domain\Services\DraftOrders;
 use Automattic\WooCommerce\Blocks\Domain\Services\FeatureGating;
@@ -129,6 +130,7 @@ class Bootstrap {
 		$this->container->get( DraftOrders::class )->init();
 		$this->container->get( CreateAccount::class )->init();
 		$this->container->get( ShippingController::class )->init();
+		$this->container->get( JetpackWooCommerceAnalytics::class )->init();
 
 		// Load assets in admin and on the frontend.
 		if ( ! $is_rest ) {
@@ -360,6 +362,15 @@ class Bootstrap {
 			function( Container $container ) {
 				$asset_api = $container->get( AssetApi::class );
 				return new GoogleAnalytics( $asset_api );
+			}
+		);
+		$this->container->register(
+			JetpackWooCommerceAnalytics::class,
+			function( Container $container ) {
+				$asset_api                  = $container->get( AssetApi::class );
+				$asset_data_registry        = $container->get( AssetDataRegistry::class );
+				$block_templates_controller = $container->get( BlockTemplatesController::class );
+				return new JetpackWooCommerceAnalytics( $asset_api, $asset_data_registry, $block_templates_controller );
 			}
 		);
 		$this->container->register(
